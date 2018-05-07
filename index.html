@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weechain Smart Contract</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>Weechain User Interface</h1>
+        <p>Owner address: <span id="owner"></span>
+        </p> 
+        <h2 id="Energyinstructor"></h2> 
+
+		<!--Set Energy Value-->
+		
+        <label for="name" class="col-lg-2 control-label">Device Address</label>
+        <input id="deviceAddressEnergy" type="text"> 
+
+        <label for="name" class="col-lg-2 control-label">Energy Value</label>
+        <input id="energyValue" type="text"> 
+
+        <button id="buttonSetEnergy">Set Energy Value</button>
+			
+        <!--Get Energy Value-->
+		
+		<button id="buttonGetEnergy">Get Energy Value</button>	
+		
+		<!--<h2 id="Energyinstructor"></h2>
+		<button id="buttonGetEnergy">>Get Energy Value of this device</button>-->
+		
+		<!--Set Power Value-->
+
+		<label for="name" class="col-lg-2 control-label">Device Address</label>
+        <input id="deviceAddressPower" type="text"> 
+
+        <label for="name" class="col-lg-2 control-label">Power Value</label>
+        <input id="powerValue" type="text">
+
+        <button id="buttonSetPower">Set Power Value</button>
+		
+		<!--Set Payload-->
+
+		<label for="name" class="col-lg-2 control-label">Sequence Number</label>
+        <input id="SQN" type="text"> 
+
+        <label for="name" class="col-lg-2 control-label">Payload Value</label>
+        <input id="payloadValue" type="text"> 
+
+        <button id="buttonSetPayload">Set Power Value</button>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+       if (typeof web3 !== 'undefined') {
+           web3 = new Web3(web3.currentProvider);
+       } else {
+           web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+       }
+
+       web3.eth.defaultAccount = web3.eth.accounts[0];
+
+       var WeechainContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"energyTotalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"dev","type":"address"}],"name":"amountOfenergy","outputs":[{"name":"energy","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"powerTotalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"dev","type":"address"},{"name":"energy","type":"uint256"}],"name":"setEnergy","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"SQN","type":"uint256"},{"name":"payload","type":"string"}],"name":"setPayload","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"dev","type":"address"}],"name":"amountOfpower","outputs":[{"name":"power","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"dev","type":"address"},{"name":"power","type":"uint256"}],"name":"setPower","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"device","type":"address"},{"indexed":false,"name":"energy","type":"uint256"}],"name":"setEnergyEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"device","type":"address"},{"indexed":false,"name":"power","type":"uint256"}],"name":"setPowerEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"SQN","type":"uint256"},{"indexed":false,"name":"payload","type":"string"}],"name":"setPayloadEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_by","type":"address"},{"indexed":true,"name":"_to","type":"address"}],"name":"ChangementOwnership","type":"event"}]);
+
+       var Weechain = WeechainContract.at('0x9240ddc345d7084cc775eb65f91f7194dbbb48d8');
+
+	   <!--setEnergyEvent event-->
+	   
+	   var EventEnergy = Weechain.setEnergyEvent({}, {fromBlock: 0, toBlock: 'latest'});
+       EventEnergy.get((error, events) => {
+       if (!error) {
+          function ShowResults(event) {
+            console.log('Device Address: ' + event.args.dev);
+            console.log('Energy Value: ' + event.args.energy);
+            }
+          events.forEach(ShowResults);
+        } else {
+        console.log('Error');
+          }
+        });
+
+		<!--setPowerEvent event-->
+		
+		var EventPower = Weechain.setPowerEvent({}, {fromBlock: 0, toBlock: 'latest'});
+       EventPower.get((error, events) => {
+       if (!error) {
+          function ShowResults(event) {
+            console.log('Device Address: ' + event.args.dev);
+            console.log('Power Value: ' + event.args.power);
+            }
+          events.forEach(ShowResults);
+        } else {
+        console.log('Error');
+          }
+        });
+
+		<!--setPayloadEvent event-->
+		
+		var EventPayload = Weechain.setPayloadEvent({}, {fromBlock: 0, toBlock: 'latest'});
+       EventPayload.get((error, events) => {
+       if (!error) {
+          function ShowResults(event) {
+            console.log('SQN: ' + event.args.SQN);
+            console.log('Payload: ' + event.args.payload);
+            }
+          events.forEach(ShowResults);
+        } else {
+        console.log('Error');
+          }
+        });
+		
+		<!--Set Energy Value--> 
+		
+       $("#buttonSetEnergy").click(function() {
+           Weechain.setEnergy($("#deviceAddressEnergy").val(), $("#energyValue").val());
+       });
+	   
+	   <!--Set Power Value--> 
+		
+       $("#buttonSetPower").click(function() {
+           Weechain.setEnergy($("#deviceAddressPower").val(), $("#powerValue").val());
+       });
+	   
+	   <!--Set Payload Value--> 
+		
+       $("#buttonSetPayload").click(function() {
+           Weechain.setEnergy($("#SQN").val(), $("#payloadValue").val());
+       });
+	   
+	   <!--Get Energy Value-->
+	   
+	   <!--Weechain.amountOfenergy(function(error, result) {
+           <!--if (!error) {
+               <!--$("#Energyinstructor").html('Energy Value:'result[0]);
+           <!--} else
+                <!--console.log(error);
+       <!--});
+
+	   $("#buttonGetEnergy").click(function() { Weechain.amountOfenergy().then(function(error, result) { if (!error) { $("#Energyinstructor").html('Energy Value:'result[0]); } else console.log(error); }); });
+	   
+	   <!--for certificate of guarantee we need to create a button and a text box to set Tx Hash such that after click using eth.getTransactionReceipt("Tx Hash") to get this information : https://web3js.readthedocs.io/en/1.0/web3-eth.html#gettransactionreceipt-->
+	   
+    </script>
+
+</body>
+</html>
