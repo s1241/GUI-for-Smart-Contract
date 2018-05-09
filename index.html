@@ -15,17 +15,19 @@
     <div class="container">
 
         <h1>Weechain Instructor</h1>
-        <p>Payload Value: <span id="owner"></span>
+        <p>Output: <span id="owner"></span>
         </p>
         <h2 id="instructor"></h2>
 
-        <label for="name" class="col-lg-2 control-label">Enter Sequence Number:</label>
-        <input id="SQN" type="text"> <!--name will be changed to device address-->
+        <label for="name" class="col-lg-2 control-label">Address</label>
+        <input id="Address" type="text"> <!--name will be changed to device address-->
 
-        <label for="name" class="col-lg-2 control-label">Enter Payload:</label>
-        <input id="payload" type="text"> <!--age will be changed to energy value type = "text" will be type = "number"-->
+        <label for="name" class="col-lg-2 control-label">Energy</label>
+        <input id="Energy" type="text"> <!--age will be changed to energy value type = "text" will be type = "number"-->
 
-        <button id="button">Update Instructor</button>
+        <button id="buttonSet">Set</button>
+		
+		<button id="buttonGet">Get</button>
 
 
     </div>
@@ -40,28 +42,28 @@
        }
 
        web3.eth.defaultAccount = web3.eth.accounts[0];
+/*
+       var CoursetroContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"_fName","type":"string"},{"name":"_age","type":"uint256"}],"name":"setInstructor","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getInstructor","outputs":[{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]);
+*/
+	var CoursetroContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"energyTotalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"dev","type":"address"}],"name":"amountOfenergy","outputs":[{"name":"energy","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"powerTotalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"dev","type":"address"},{"name":"energy","type":"uint256"}],"name":"setEnergy","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"SQN","type":"uint256"},{"name":"payload","type":"string"}],"name":"setPayload","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"dev","type":"address"}],"name":"amountOfpower","outputs":[{"name":"power","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"dev","type":"address"},{"name":"power","type":"uint256"}],"name":"setPower","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"device","type":"address"},{"indexed":false,"name":"energy","type":"uint256"}],"name":"setEnergyEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"device","type":"address"},{"indexed":false,"name":"power","type":"uint256"}],"name":"setPowerEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"SQN","type":"uint256"},{"indexed":false,"name":"payload","type":"string"}],"name":"setPayloadEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_by","type":"address"},{"indexed":true,"name":"_to","type":"address"}],"name":"ChangementOwnership","type":"event"}]);
 
-       var CoursetroContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"energyTotalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"dev","type":"address"}],"name":"amountOfenergy","outputs":[{"name":"energy","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"powerTotalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"dev","type":"address"},{"name":"energy","type":"uint256"}],"name":"setEnergy","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"SQN","type":"uint256"},{"name":"payload","type":"string"}],"name":"setPayload","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"dev","type":"address"}],"name":"amountOfpower","outputs":[{"name":"power","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"dev","type":"address"},{"name":"power","type":"uint256"}],"name":"setPower","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"device","type":"address"},{"indexed":false,"name":"energy","type":"uint256"}],"name":"setEnergyEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"device","type":"address"},{"indexed":false,"name":"power","type":"uint256"}],"name":"setPowerEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"SQN","type":"uint256"},{"indexed":false,"name":"payload","type":"string"}],"name":"setPayloadEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_by","type":"address"},{"indexed":true,"name":"_to","type":"address"}],"name":"ChangementOwnership","type":"event"}]);
+       var Coursetro = CoursetroContract.at('0x9ea9de4056ae3defda58ca02257e7b6218f2e6eb');
 
-       var Weechain = WeechainContractWeechainContract.at('0x842f5aee4fc11a789e2cfba4cce8804ac905d9d3');
+	   $("#buttonGet").click(function() {
+       Coursetro.amountOfenergy('0xbacbc6e824272c7c501d930d8bb2a9e4d1a80312', function(error, result) {
+           if (!error) {
+               $("#instructor").html(result[0])+' ('+result[1]+')');
+			   console.log(result);
+           } else
+                console.log(error);
+       });
+	   
+	   });
 
-	   <!--setPayloadEvent event-->
-		
-		var EventPayload = Weechain.setPayloadEvent({}, {fromBlock: 0, toBlock: 'latest'});
-       EventPayload.get((error, events) => {
-       if (!error) {
-          function ShowResults(event) {
-            console.log('SQN: ' + event.args.SQN);
-            console.log('Payload: ' + event.args.payload);
-            }
-          events.forEach(ShowResults);
-        } else {
-        console.log('Error');
-          }
-        });
-
-       $("#button").click(function() {
-           Weechain.setPayload($("#SQN").val(), $("#payload").val());
+       $("#buttonSet").click(function() {
+           //Coursetro.setPayload($("#name").val(), $("#age").val());
+		   Coursetro.setEnergy($("#Address").val(), $("#Energy").val());
+		   //Coursetro.setPayload($("#name").val());
        });
 
     </script>
